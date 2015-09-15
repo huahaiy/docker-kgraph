@@ -7,16 +7,22 @@ FROM huahaiy/debian
 
 MAINTAINER Huahai Yang <hyang@juji-inc.com>
 
+ADD kgraph /kgraph
+
 RUN \
   echo "===> install dependencies..."  && \ 
   apt-get update  && \
-  apt-get install -y --force-yes git ssh-client libboost-all-dev python-numpy libopenblas-dev  && \
-  \
-  \
+  apt-get install -y --force-yes build-essential git libboost-timer-dev \
+    libboost-chrono-dev libboost-program-options-dev libboost-system-dev \
+    libboost-python-dev python-numpy libopenblas-dev  
+
+RUN \
   echo "===> build "  && \
-  git clone git@github.com:aaalgo/kgraph.git && \
-  cd kgraph && \
-  make install
+  cd /kgraph && \
+  sed -i 's/libblas/libopenblas/' /kgraph/python/Makefile && \
+  make && \
+  make install && \
+  make clean && \
   \
   \
   echo "===> clean up..."  && \
