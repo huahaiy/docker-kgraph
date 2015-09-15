@@ -14,7 +14,8 @@ RUN \
   apt-get update  && \
   apt-get install -y --force-yes build-essential git libboost-timer-dev \
     libboost-chrono-dev libboost-program-options-dev libboost-system-dev \
-    libboost-python-dev python-numpy libopenblas-dev  
+    libboost-python-dev python-numpy python-setuptools libopenblas-dev && \
+  easy_install wheezy.web
 
 RUN \
   echo "===> build "  && \
