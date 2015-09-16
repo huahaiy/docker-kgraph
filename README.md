@@ -19,7 +19,7 @@ After finsing the indexing, check that a file called `<your.file>.index` is crea
 Search is running as a simple HTTP service on default port 8071. `-p` option allows one to change the port. Make sure to expose that port from container, like so:
 
     docker run  -v <local_directory>:/kgraph \
-                -p 8080:8080
+                -p 8080:8080 \
                 -it huahaiy/kgraph  \
                 search.py -p 8080 -f /kgraph/<your.file>
 
