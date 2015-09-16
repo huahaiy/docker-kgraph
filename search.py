@@ -11,11 +11,11 @@ class WelcomeHandler(BaseHandler):
 
     def get(self):
         response = HTTPResponse()
-        response.write('Hello World!')
+        response.write('Nothing here, move along.')
         return response
 
 
-def welcome(request):
+def search(request):
     response = HTTPResponse()
     response.write('Hello World!')
     return response
@@ -23,7 +23,7 @@ def welcome(request):
 
 all_urls = [
     url('', WelcomeHandler, name='default'),
-    url('welcome', welcome, name='welcome')
+    url('search', search, name='search')
 ]
 
 
@@ -40,8 +40,8 @@ main = WSGIApplication(
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
     try:
-        print('Visit http://localhost:8080/')
-        make_server('', 8080, main).serve_forever()
+        print('Visit http://localhost:8071/')
+        make_server('', 8071, main).serve_forever()
     except KeyboardInterrupt:
         pass
     print('\nThanks!')
