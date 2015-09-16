@@ -24,8 +24,9 @@ class SearchHandler(BaseHandler):
 	pq[:, :-needed] = q
 
 	result = index.search(padded, pq, K = k, withDistance = True)
+	ids = map(lambda x: pids[x], result[0][0].tolist())
 
-        return self.json_response({'ids': result[0][0].tolist(), 'dists': result[1][0].tolist()})
+        return self.json_response({'ids': ids, 'dists': result[1][0].tolist()})
 
 
 def welcome(request):
@@ -68,7 +69,7 @@ def main(argv):
 	elif opt in ("-p", "--port"):
 	    port = arg
 
-    global n, needed, padded, index
+    global n, pids, needed, padded, index
 
     data = np.genfromtxt(datafile, delimiter=',')
     (m, n) = data.shape
