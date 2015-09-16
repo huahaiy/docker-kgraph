@@ -7,7 +7,10 @@ FROM huahaiy/debian
 
 MAINTAINER Huahai Yang <hyang@juji-inc.com>
 
-ADD kgraph /kgraph
+ADD kgraph /opt/kgraph
+
+ADD index.py /usr/bin/index.py
+ADD search.py /usr/bin/search.py
 
 RUN \
   echo "===> install dependencies..."  && \ 
@@ -19,8 +22,8 @@ RUN \
 
 RUN \
   echo "===> build "  && \
-  cd /kgraph && \
-  sed -i 's/libblas/libopenblas/' /kgraph/python/Makefile && \
+  cd /opt/kgraph && \
+  sed -i 's/libblas/libopenblas/' /opt/kgraph/python/Makefile && \
   make && \
   make install && \
   make clean && \
@@ -30,3 +33,6 @@ RUN \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ENV KGRAPH_DATA /kgraph
+
+VOLUME ["/kgraph"]
