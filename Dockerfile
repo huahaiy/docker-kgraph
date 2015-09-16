@@ -35,4 +35,6 @@ RUN \
 
 ENV KGRAPH_DATA /kgraph
 
+EXPOSE 8071
+
 VOLUME ["/kgraph"]
