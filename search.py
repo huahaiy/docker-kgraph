@@ -1,9 +1,10 @@
 #!/usr/bin/python
+"""Provide KNN search service over HTTP.  """
 
 import sys, getopt 
+import json
 import numpy as np
 import pykgraph as kg
-import json
 
 from wheezy.http import HTTPResponse
 from wheezy.http import WSGIApplication
@@ -12,13 +13,28 @@ from wheezy.web.handlers import BaseHandler
 from wheezy.web.middleware import bootstrap_defaults
 from wheezy.web.middleware import path_routing_middleware_factory
 
+__author__ = "Huahai Yang"
+__copyright__ = "Copyright 2015, Juji, Inc."
+__license__ = "BSD"
+__maintainer__ = "Huahai Yang"
+__email__ = "hyang@juji-inc.com"
+__status__ = "Development"
+
+
 class SearchHandler(BaseHandler):
 
     def get(self):
-	# TODO: check the params exist and validate them, also allow specifying data 
-	#d = self.request.query.get('d')[0]
+	# TODO: check the params exist and validate them
+        d = self.request.query.get('d')[0]
 	k = int(self.request.query.get('k')[0])
 	q = [[float(x) for x in self.request.query.get('q')]]
+
+        dd = indices[d]
+        n = dd['n']
+        needed = dd['needed']
+        index = dd['index']
+        padded = dd['padded']
+        pids = dd['pids']
 
     	pq = np.zeros((1, n - 1 + needed))
 	pq[:, :-needed] = q
@@ -50,27 +66,10 @@ web = WSGIApplication(
     options=options
 )
 
-def main(argv):
-    # TODO: load multiple data files and indices
-    datafile = ''
-    port = 8071
 
-    try:
-        opts, args = getopt.getopt(argv, "hp:f:", ["port=", "datafile="])
-    except getopt.GetoptError:
-        print 'search.py -p <port> -f <datafile>'
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'search.py -p <port> -f <datafile>'
-            sys.exit()
-        elif opt in ("-f", "--datafile"):
-            datafile = arg
-	elif opt in ("-p", "--port"):
-	    port = arg
+indices = {}
 
-    global n, pids, needed, padded, index
-
+def load(entry, datafile):
     data = np.genfromtxt(datafile, delimiter=',')
     (m, n) = data.shape
 
@@ -84,6 +83,46 @@ def main(argv):
 
     index = kg.KGraph()
     index.load(datafile + ".index")
+
+    entry['m'] = m
+    entry['n'] = n
+    entry['pids'] = pids
+    entry['needed'] = needed
+    entry['padded'] = padded
+    entry['index'] = index
+
+
+def init(datanames, datafiles):
+    names = datanames.split(',')
+    files = datafiles.split(',')
+
+    for i in range(0, len(names) - 1):
+        indices[names[i]] = {} 
+        load(indices[names[i]], files[i]) 
+
+
+def main(argv):
+    datafiles = ''
+    datanames = ''
+    port = 8071
+    try:
+        opts, args = getopt.getopt(argv, "hp:f:d:", 
+                ["port=", "datafiles=", "datanames="])
+    except getopt.GetoptError:
+        print 'search.py -p <port> -d <datanames> -f <datafiles>'
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print 'search.py -p <port> -d <datanames> -f <datafiles>'
+            sys.exit()
+        elif opt in ("-d", "--datanames"):
+            datanames = arg
+        elif opt in ("-f", "--datafiles"):
+            datafiles = arg
+	elif opt in ("-p", "--port"):
+	    port = arg
+
+    init(datanames, datafiles)
 
     from wsgiref.simple_server import make_server
     try:

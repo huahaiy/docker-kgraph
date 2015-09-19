@@ -1,7 +1,7 @@
 #
 # Run kgraph KNN search service on HTTP 
 #
-# Version     0.1
+# Version     0.2
 #
 FROM huahaiy/debian
 

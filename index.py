@@ -1,8 +1,16 @@
 #!/usr/bin/python
+"""Index a CSV file for KNN search.  """
 
 import sys, getopt 
 import numpy as np
 import pykgraph as kg
+
+__author__ = "Huahai Yang"
+__copyright__ = "Copyright 2015, Juji, Inc."
+__license__ = "BSD"
+__maintainer__ = "Huahai Yang"
+__email__ = "hyang@juji-inc.com"
+__status__ = "Development"
 
 def main(argv):
     # A csv filename
