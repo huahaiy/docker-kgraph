@@ -26,7 +26,6 @@ def main(argv):
             sys.exit()
         elif opt in ("-f", "--datafile"):
             datafile = arg
-    print 'Data file is "', datafile
 
     data = np.genfromtxt(datafile, delimiter=',')
     (m, n) = data.shape

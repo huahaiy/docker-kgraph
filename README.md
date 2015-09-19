@@ -1,8 +1,8 @@
 # docker-kgraph
 
-This image contains some python code to run [KGraph](https://github.com/aaalgo/kgraph) K nearst neighbour search over a simple HTTP server. 
+This image contains some python code to run [KGraph](https://github.com/aaalgo/kgraph) K nearest neighbour search over a simple HTTP server. 
 
-The data should be in comma separated CSV file format. The first column of the data file should be some kind of IDs of the rows to be indexed. The rest of the columns should all be floating point numbers. The CSV file should NOT have a header line. The columns should be identified positionally.
+The input data should be in the format of comma separated CSV files. The first column of the data file should be some kind of IDs of the rows to be indexed. The rest of the columns should all be floating point numbers. The CSV data file should NOT have a header line. The data files must be indexed before becoming available for search. 
 
 ## index
 
@@ -27,7 +27,7 @@ Search is running as a simple HTTP service on default port 8071. `-p` option all
                           -f <data.file1>,<data.file2>,<data.file3>
 
 
-As can be seen, multiple data sources can be specified for the searcher. `-d` gives the coma separated names assigned to each data files, which corresponding to the `d=` parameters in the search URL; `-f` are the corresponding data file names that were used during indexing. 
+As can be seen, multiple data sources can be specified for the searcher. `-d` gives the coma separated names assigned to each data files, which should correspond to the `d=` parameters in the search URL; `-f` are the corresponding data file names that were used during indexing. 
 
 The search URL is something like this: 
 
