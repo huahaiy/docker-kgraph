@@ -95,11 +95,12 @@ def load(entry, datafile):
 def init(datanames, datafiles):
     names = datanames.split(',')
     files = datafiles.split(',')
-
-    for i in range(0, len(names) - 1):
-        indices[names[i]] = {} 
-        load(indices[names[i]], files[i]) 
-
+	
+    for i in range(0, len(names)):
+	n = names[i]
+        indices[n] = {} 
+        load(indices[n], files[i]) 
+	
 
 def main(argv):
     datafiles = ''
